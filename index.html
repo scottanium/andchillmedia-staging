@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="theme-color" content="#121218"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="andchillmedia (staging)"/>
+<link rel="manifest" href="./manifest.webmanifest"/>
+<link rel="apple-touch-icon" href="./apple-touch-icon.png"/>
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png"/>
+<title>[STAGING] andchillmedia</title>
+<link rel="stylesheet" href="./css/media.css"/>
+<link rel="stylesheet" href="./css/base.css"/>
+</head>
+<body>
+
+<div id="noticeGate" aria-modal="true" role="dialog" aria-label="Before you use this software">
+  <div id="noticeBox">
+    <pre id="noticeText"></pre>
+    <div id="noticeActions">
+      <button type="button" id="noticeAgree" data-text="buttons.agree"></button>
+      <button type="button" id="noticeExit" data-text="buttons.exit"></button>
+    </div>
+  </div>
+</div>
+<div id="exitScreen">
+  <div style="max-width:420px">
+    <p style="font-size:1.05rem;margin:0 0 8px" data-text="buttons.exitMessage"></p>
+    <button type="button" id="reopenNotice" style="border-radius:10px;padding:10px 18px;background:var(--accent);color:#0b1220;border:none;font-weight:700;cursor:pointer" data-text="buttons.showNoticeAgain"></button>
+  </div>
+</div>
+
+<div id="appRoot" class="locked">
+<header>
+  <div class="toprow">
+    <h1 data-text="appName"></h1>
+    <div class="tabs" role="tablist" aria-label="Section">
+      <button type="button" role="tab" class="active" data-tab="music" aria-selected="true" data-text="tabs.music"></button>
+      <button type="button" role="tab" data-tab="movie" aria-selected="false" data-text="tabs.movie"></button>
+      <button type="button" role="tab" data-tab="tv" aria-selected="false" data-text="tabs.tv"></button>
+      <button type="button" role="tab" data-tab="search" aria-selected="false" data-text="tabs.search"></button>
+      <button type="button" role="tab" data-tab="history" aria-selected="false" data-text="tabs.history"></button>
+    </div>
+    <button type="button" id="profBtn" class="profbtn" aria-label="Switch profile"></button>
+  </div>
+  <div id="musicCtl">
+  <div class="sub" data-text="musicSubtitle"></div>
+  <div class="nav" id="crumbs"></div>
+  <div class="nav" style="margin-top:8px">
+    <input id="q" type="search" data-placeholder="placeholders.music" />
+    <button type="button" id="btnShuffle" data-text="buttons.shuffle"></button>
+    <button type="button" id="btnQueue" data-text="buttons.queue"></button>
+  </div>
+  </div>
+  <div id="mediaCtl" class="hide">
+    <div class="mrow">
+      <input id="mQ" type="search" data-placeholder="placeholders.media" aria-label="Search titles"/>
+      <select id="mSort" class="msel" aria-label="Sort by" data-options="sorts.media"></select>
+      <button type="button" id="mFiltBtn" class="mbtn" data-text="buttons.filters"></button>
+    </div>
+    <div id="mFilters" class="hide">
+      <div class="fl">Where to watch</div><div class="chips" id="mCats"></div>
+      <div class="frow">
+        <div><div class="fl">Service</div><select id="mProv" class="msel" aria-label="Streaming service"></select></div>
+        <div><div class="fl">Year</div><div class="chips"><input id="mY1" class="yr" type="number" inputmode="numeric" placeholder="From" min="1900" max="2100" aria-label="From year"/><input id="mY2" class="yr" type="number" inputmode="numeric" placeholder="To" min="1900" max="2100" aria-label="To year"/></div></div>
+        <div><div class="fl">Age rating</div><select id="mCert" class="msel" aria-label="Age rating"></select></div>
+        <div><div class="fl">Original language</div><select id="mLang" class="msel" aria-label="Language"></select></div>
+      </div>
+      <div class="fl">Decade</div><div class="chips" id="mDecades"></div>
+      <div class="fl">Genres (match all selected)</div><div class="chips" id="mGenres"></div>
+      <div style="margin-top:12px"><button type="button" id="mReset" class="mbtn" data-text="buttons.resetFilters"></button></div>
+    </div>
+  </div>
+  <div id="searchCtl" class="hide">
+    <div class="mrow">
+      <input id="sQ" type="search" data-placeholder="placeholders.searchAll" aria-label="Search everything" autocomplete="off"/>
+      <select id="sSort" class="msel" aria-label="Sort by" data-options="sorts.search"></select>
+      <button type="button" id="sFiltBtn" class="mbtn" data-text="buttons.filters"></button>
+    </div>
+    <div class="mrow chips" id="sTypes" role="group" aria-label="Type"></div>
+    <div id="sFilters" class="hide">
+      <div class="fl">Cost</div><div class="chips" id="sCats"></div>
+      <div class="frow">
+        <div><div class="fl">Genre</div><select id="sGenre" class="msel" aria-label="Genre"></select></div>
+        <div><div class="fl">Year</div><div class="chips"><input id="sY1" class="yr" type="number" inputmode="numeric" placeholder="From" min="1900" max="2100" aria-label="From year"/><input id="sY2" class="yr" type="number" inputmode="numeric" placeholder="To" min="1900" max="2100" aria-label="To year"/></div></div>
+      </div>
+      <div class="fl">Decade</div><div class="chips" id="sDecades"></div>
+      <div style="margin-top:12px"><button type="button" id="sReset" class="mbtn" data-text="buttons.resetFilters"></button> <span class="pnote" style="display:inline">Music has no ratings, so “Highest rated” orders albums by track count.</span></div>
+    </div>
+  </div>
+</header>
+<main>
+  <div id="view" class="list"></div>
+  <section id="mediaView" class="hide">
+    <div class="mcount" id="mCount"></div>
+    <div class="grid" id="mGrid"></div>
+    <div id="mSentinel"></div>
+    <div class="credits">
+      <a href="https://www.themoviedb.org/" target="_blank" rel="noopener"><img src="./tmdb-logo.svg" alt="TMDB logo"/></a>
+      <span data-html="credits.media"></span>
+    </div>
+  </section>
+  <section id="searchView" class="hide">
+    <div class="mcount" id="sCount"></div>
+    <div id="sResults"></div>
+    <div id="sSentinel" style="height:40px"></div>
+    <div class="credits">
+      <a href="https://www.themoviedb.org/" target="_blank" rel="noopener"><img src="./tmdb-logo.svg" alt="TMDB logo"/></a>
+      <span data-html="credits.search"></span>
+    </div>
+  </section>
+  <section id="histView" class="hide">
+    <div class="histbar">
+      <div class="tabs histtabs" role="tablist" aria-label="History type">
+        <button type="button" class="active" data-hist="listen" aria-selected="true">Listen</button>
+        <button type="button" data-hist="watch" aria-selected="false">Watch</button>
+      </div>
+      <button type="button" id="histClear" class="mbtn" data-text="buttons.clearHistory"></button>
+    </div>
+    <div class="histwho">Showing history for <b id="histWho"></b> · switch profiles with the button at the top.</div>
+    <div class="histcount" id="histCount"></div>
+    <div id="histList" class="list"></div>
+  </section>
+</main>
+<div id="sheet" role="dialog" aria-modal="true" aria-label="Title details">
+  <div id="sheetBox"><button type="button" id="sheetClose">&#x2715; Close</button><div id="sheetBody"></div></div>
+</div>
+<div class="player">
+  <div class="nowrow">
+    <span class="art" id="nowArt" style="--h:220" data-initial="♪" aria-hidden="true"></span>
+    <div class="now" id="now" data-text="nothingPlaying"></div>
+  </div>
+  <div class="controls">
+    <button type="button" id="prev" data-text="buttons.prev"></button>
+    <button type="button" class="primary" id="play" data-text="buttons.play"></button>
+    <button type="button" id="next" data-text="buttons.next"></button>
+    <input id="seek" type="range" min="0" max="1000" value="0"/>
+    <span id="time" class="sub">0:00</span>
+    <input id="vol" class="vol" type="range" min="0" max="1" step="0.01" value="0.9"/>
+  </div>
+  <audio id="audio" preload="metadata"></audio>
+</div>
+</div>
+<script src="./config/generated-config.js"></script>
+<script src="./js/ui-text.js"></script>
+<script src="./js/helpers.js"></script>
+<script src="./js/providers.js"></script>
+<script src="./js/profiles.js"></script>
+<script src="./catalog.js"></script>
+<script src="./catalog-more.js"></script>
+<script src="./catalog-more2.js"></script>
+<script src="./js/notice.js"></script>
+<script src="./js/music.js"></script>
+<script src="./js/history.js"></script>
+<script src="./js/music-browse.js"></script>
+<script src="./js/music-controls.js"></script>
+<script src="./js/sw-register.js"></script>
+<script src="./js/music-init.js"></script>
+<script src="./js/media-data.js"></script>
+<script src="./js/media-sheet.js"></script>
+<script src="./js/media-ui.js"></script>
+<script src="./js/search.js"></script>
+<script src="./js/tabs.js"></script>
+<button id="refreshBtn" type="button" aria-label="Refresh app">&#x21bb; Refresh</button>
+<script src="./js/refresh.js"></script>
+<script src="./js/stage.js"></script>
+</body>
+</html>
